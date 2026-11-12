@@ -25,7 +25,7 @@ extension UserDefaults {
     // MARK: App
 
     /// Settings that should apply to the app
-    static let appSuite = UserDefaults(suiteName: "swiftfinApp")!
+    static let appSuite = UserDefaults(suiteName: "naqafinApp")!
 
     // MARK: User
 
@@ -208,6 +208,10 @@ extension Defaults.Keys {
         }
 
         enum Home {
+            static var includeAudioPlaylistItems: Key<Bool> {
+                UserKey("naqafinIncludeAudioPlaylistItems", default: false)
+            }
+
             static var showRecentlyAdded: Key<Bool> {
                 UserKey("showRecentlyAdded", default: true)
             }
@@ -340,6 +344,40 @@ extension Defaults.Keys {
             }
         }
 
+        enum MediaSegments {
+
+            static var commercialAction: Key<MediaSegmentAction> {
+                UserKey("mediaSegmentCommercialAction", default: .ask)
+            }
+
+            static var introAction: Key<MediaSegmentAction> {
+                UserKey("mediaSegmentIntroAction", default: .ask)
+            }
+
+            static var outroAction: Key<MediaSegmentAction> {
+                UserKey("mediaSegmentOutroAction", default: .ask)
+            }
+
+            static var previewAction: Key<MediaSegmentAction> {
+                UserKey("mediaSegmentPreviewAction", default: .ask)
+            }
+
+            static var recapAction: Key<MediaSegmentAction> {
+                UserKey("mediaSegmentRecapAction", default: .ask)
+            }
+        }
+
+        enum GeneratedCaptions {
+
+            static var language: Key<String> {
+                UserKey("generatedCaptionLanguage", default: "auto")
+            }
+
+            static var openAIPolish: Key<Bool> {
+                UserKey("generatedCaptionOpenAIPolish", default: true)
+            }
+        }
+
         enum Playback {
             static var appMaximumBitrate: Key<PlaybackBitrate> {
                 UserKey("appMaximumBitrate", default: .auto)
@@ -405,7 +443,7 @@ extension Defaults.Keys {
 
 extension UserDefaults {
 
-    static let debugSuite = UserDefaults(suiteName: "swiftfinstore-debug-defaults")!
+    static let debugSuite = UserDefaults(suiteName: "naqafinstore-debug-defaults")!
 }
 
 extension Defaults.Keys {

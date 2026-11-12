@@ -31,7 +31,7 @@ struct ImageView<_Image: View, Placeholder: View, Failure: View>: View {
                 if state.isLoading {
                     placeholder(currentSource)
                 } else if let container = state.imageContainer {
-                    if let data = container.data {
+                    if let data = container.data, data.isSVG {
                         FastSVGView(data: data)
                     } else {
                         image(container.image)
@@ -48,6 +48,17 @@ struct ImageView<_Image: View, Placeholder: View, Failure: View>: View {
         } else {
             failure
         }
+    }
+}
+
+private extension Data {
+
+    var isSVG: Bool {
+        let prefix = String(decoding: prefix(512), as: UTF8.self)
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .lowercased()
+
+        return prefix.hasPrefix("<?xml") && prefix.contains("<svg") || prefix.hasPrefix("<svg")
     }
 }
 

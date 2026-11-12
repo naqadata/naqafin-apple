@@ -1,14 +1,11 @@
 <div align="center">
-  <img alt="Swiftfin" src="./Resources/primary-wide.svg">
+  <img alt="Naqafin" src="./Resources/naqafin-wide.png">
 
-  <h1>Swiftfin</h1>
+  <h1>Naqafin</h1>
   <img src="https://img.shields.io/badge/iOS-16+-red"/>
   <img src="https://img.shields.io/badge/tvOS-26+-red"/>
   <img src="https://img.shields.io/badge/Jellyfin-10.11-9962be"/>
   
-  <a href="https://translate.jellyfin.org/engage/swiftfin/">
-    <img src="https://translate.jellyfin.org/widgets/swiftfin/-/svg-badge.svg"/>
-  </a>
   <a href="https://matrix.to/#/#jellyfin:matrix.org">
     <img src="https://img.shields.io/matrix/jellyfin:matrix.org">
   </a>
@@ -18,42 +15,26 @@
 </div>
 
 <p align="center">
-  <b>Swiftfin</b> is a modern video client for the <a href="https://github.com/jellyfin/jellyfin">Jellyfin</a> media server. Made using Swift to maximize direct play with the power of <b>VLC</b> and look <b>native</b> on all classes of Apple devices.
+  <b>Naqafin</b> is a fork of Swiftfin for the <a href="https://github.com/jellyfin/jellyfin">Jellyfin</a> media server, adapted for Naqadata's Naqafin product family.
 </p>
 
-## ⚡️ Download
+## Fork Notice
 
-<a href="https://apps.apple.com/us/app/swiftfin/id1604098728">
-  <img height=75 alt="Download on the Apple App Store" src="./Resources/Download_on_the_App_Store_Badge_US-UK_RGB_blk_092917.svg"/>
-</a>
+This repository is based on the official [Jellyfin Swiftfin](https://github.com/jellyfin/Swiftfin) Apple client. Jellyfin and Swiftfin names, documentation references, and API terminology may still appear where they identify the upstream project or Jellyfin server platform.
 
-## 🛠️ TestFlight
+## Status
 
-Use the TestFlight version to test new features and bug fixes before being published to the App Store. We are grateful for your time and resources for reporting new bugs.
-
-<a href="https://testflight.apple.com/join/SqNPfdxq">
-  <img height=75 alt="Get the beta on TestFlight" src="./Resources/testflight.svg"/>
-</a>
+Naqafin is currently being brought to parity with the existing Roku implementation. App Store and TestFlight links will be added when Naqafin Apple releases are available.
 
 ## 📖 Documentation
 
-Swiftfin provides detailed documentation to help you understand key aspects of the app and its development approach:
+The inherited Swiftfin documentation remains useful while this fork is being adapted:
 
-- [🎞️ Library Support](https://github.com/jellyfin/Swiftfin/blob/main/Documentation/libraries.md) — Information on **library compatibility** and supported media types in Swiftin.
-- [🎬 Media Playback](https://github.com/jellyfin/Swiftfin/blob/main/Documentation/players.md) — Learn about Swiftfin's **Native** and **Swiftfin** players and how their features vary.
-- [🧩 OS Version Support](https://github.com/jellyfin/Swiftfin/blob/main/Documentation/version.md) — Read about how we determine the **minimum supported OS** and which versions of iOS & tvOS are supported.
-- [💜 Supporting Development](https://jellyfin.org/docs/general/contributing/direct-donations) — Learn how you can **support the project developers** and help keep Swiftfin improving.
+- [Library Support](Documentation/libraries.md)
+- [Media Playback](Documentation/players.md)
+- [OS Version Support](Documentation/version.md)
+- [Contributing](Documentation/contributing.md)
 
 ## ⚙️ Development
 
-Thank you for your interest in Swiftfin! Please check out the [Contribution Guidelines](https://github.com/jellyfin/Swiftfin/blob/main/Documentation/contributing.md) to get started.
-
-## 📚 Translations
-
-**Don't see Swiftfin in your language?**
-
-Check out our [Weblate instance](https://translate.jellyfin.org/projects/swiftfin/) to help translate Swiftfin and other Jellyfin projects.
-
-<a href="https://translate.jellyfin.org/engage/swiftfin/">
-<img src="https://translate.jellyfin.org/widgets/swiftfin/-/multi-auto.svg"/>
-</a>
+Set your Apple developer team in `XcodeConfig/DevelopmentTeam.xcconfig` if needed. The shared bundle identifier for this fork is `com.naqadata.naqafin`.

@@ -12,7 +12,7 @@ import Foundation
 let localizationFile = "./Translations/en.lproj/Localizable.strings"
 
 // Directories to scan for Swift files
-let directoriesToScan = ["./Shared", "./Swiftfin", "./Swiftfin tvOS"]
+let directoriesToScan = ["./Shared", "./Naqafin", "./Naqafin tvOS"]
 
 // File to exclude from scanning
 let excludedFile = "./Shared/Strings/Strings.swift"

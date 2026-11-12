@@ -28,14 +28,14 @@ Create the `XcodeConfig/DevelopmentTeam.xcconfig` file [through Xcode](https://d
 
 ```
 DEVELOPMENT_TEAM = ""
-PRODUCT_BUNDLE_IDENTIFIER = org.jellyfin.swiftfin
+PRODUCT_BUNDLE_IDENTIFIER = com.naqadata.naqafin
 ```
 
 Update the `DEVELOPMENT_TEAM` value with your Team ID. This can be found by:
 - Setting the `Development Team` value under the `Signing & Capabilities` tab in Xcode and get the value from source control. Make sure to discard this change.
 - Logging into your Apple Developer account and [view your membership details](https://developer.apple.com/account/#/membership). It will be listed next to `Team ID`.
 
-You can change the `PRODUCT_BUNDLE_IDENTIFIER` value to have multiple builds of Swiftfin on your devices or for provisioning purposes.
+You can change the `PRODUCT_BUNDLE_IDENTIFIER` value to have multiple builds of Naqafin on your devices or for provisioning purposes.
 
 `DevelopmentTeam.xcconfig` is already added to the `.gitignore`.
 

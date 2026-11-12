@@ -34,8 +34,8 @@ jobs:
     name: Resolve platform
     runs-on: ubuntu-latest
     env:
-      IOS_SCHEME: "Swiftfin"
-      TVOS_SCHEME: "Swiftfin tvOS"
+      IOS_SCHEME: "Naqafin"
+      TVOS_SCHEME: "Naqafin tvOS"
       EVENT_NAME: ${{ github.event_name }}
       PLATFORM_INPUT: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.platform || inputs.platform || github.event.inputs.platform }}
     outputs:

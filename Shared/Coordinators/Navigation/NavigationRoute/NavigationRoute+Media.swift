@@ -85,7 +85,9 @@ struct VideoPlayerViewShim: View {
 
     var body: some View {
         Group {
-            if Defaults[.VideoPlayer.videoPlayerType] == .swiftfin {
+            if Defaults[.VideoPlayer.videoPlayerType] == .swiftfin
+                || Container.shared.currentUserSession()?.naqafinFeatureService.snapshot.supportsLiveCaptions == true
+            {
                 VideoPlayer()
             } else {
                 NativeVideoPlayer()

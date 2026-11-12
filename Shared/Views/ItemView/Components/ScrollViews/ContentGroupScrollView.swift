@@ -90,7 +90,7 @@ extension ItemView {
                     .defaultFocus(
                         $focusedGroupID,
                         "itemView-header",
-                        priority: .userInitiated
+                        priority: .automatic
                     )
                 }
                 .trackingFrame(for: .scrollView)

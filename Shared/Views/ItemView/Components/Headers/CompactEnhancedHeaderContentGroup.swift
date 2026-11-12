@@ -82,6 +82,8 @@ extension ItemView {
 
                         ItemView.Description(item: provider.item)
 
+                        PlaylistUpNextContextLabel(provider: provider)
+
                         ItemView.AttributesHStack(
                             attributes: attributes,
                             item: provider.item,

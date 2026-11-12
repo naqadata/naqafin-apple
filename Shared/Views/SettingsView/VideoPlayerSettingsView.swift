@@ -52,6 +52,19 @@ struct VideoPlayerSettingsView: View {
     @Default(.VideoPlayer.Subtitle.configuration)
     private var subtitleConfiguration
 
+    // MARK: - Media Segment Defaults
+
+    @Default(.VideoPlayer.MediaSegments.commercialAction)
+    private var commercialSegmentAction
+    @Default(.VideoPlayer.MediaSegments.introAction)
+    private var introSegmentAction
+    @Default(.VideoPlayer.MediaSegments.outroAction)
+    private var outroSegmentAction
+    @Default(.VideoPlayer.MediaSegments.previewAction)
+    private var previewSegmentAction
+    @Default(.VideoPlayer.MediaSegments.recapAction)
+    private var recapSegmentAction
+
     // MARK: - Timestamp Defaults
 
     @Default(.VideoPlayer.Overlay.trailingTimestampType)
@@ -90,6 +103,8 @@ struct VideoPlayerSettingsView: View {
             sliderSettings
 
             supplementSettings
+
+            mediaSegmentSettings
 
             timestampSettings
 
@@ -208,6 +223,19 @@ struct VideoPlayerSettingsView: View {
                     selectedSupplementsBinding: $supplements
                 ))
             }
+        }
+    }
+
+    // MARK: - Media Segment Settings
+
+    @ViewBuilder
+    private var mediaSegmentSettings: some View {
+        Section("Media Segments") {
+            PlatformPicker("Commercial", selection: $commercialSegmentAction)
+            PlatformPicker("Intro", selection: $introSegmentAction)
+            PlatformPicker("Outro", selection: $outroSegmentAction)
+            PlatformPicker(L10n.preview, selection: $previewSegmentAction)
+            PlatformPicker("Recap", selection: $recapSegmentAction)
         }
     }
 

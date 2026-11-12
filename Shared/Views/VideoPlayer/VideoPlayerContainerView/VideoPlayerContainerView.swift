@@ -57,10 +57,12 @@ extension VideoPlayer {
         func makeUIViewController(context: Context) -> UIVideoPlayerContainerViewController {
             let playerView = player
                 .environment(\.audioOffset, context.environment.audioOffset)
+                .environment(\.subtitleOffset, context.environment.subtitleOffset)
                 .eraseToAnyView()
 
             let playbackControlsView = playbackControls
                 .environment(\.audioOffset, context.environment.audioOffset)
+                .environment(\.subtitleOffset, context.environment.subtitleOffset)
                 .eraseToAnyView()
 
             return UIVideoPlayerContainerViewController(
@@ -543,6 +545,7 @@ extension VideoPlayer {
             Task { @MainActor in
                 disableTogglePlayPauseCommand()
             }
+
             #endif
         }
 
@@ -574,6 +577,7 @@ extension VideoPlayer {
                     self?.supplementContainerView.isUserInteractionEnabled = isPresenting
                 }
                 .store(in: &cancellables)
+
             #endif
         }
 
@@ -862,6 +866,8 @@ extension VideoPlayer {
             if containerState.isScrubbing {
                 containerState.cancelScrub()
                 containerState.timer.poke()
+            } else if containerState.isPresentingPlaybackActionMenu {
+                containerState.isPresentingPlaybackActionMenu = false
             } else if containerState.isPresentingSupplement {
                 containerState.selectedSupplement = nil
                 presentSupplementContainer(false)

@@ -18,6 +18,8 @@ struct ItemSubtitleSearchView: View {
     @ObservedObject
     var viewModel: ItemSubtitlesViewModel
 
+    var onDownloaded: (([MediaStream]) -> Void)?
+
     @Router
     private var router
 
@@ -45,6 +47,7 @@ struct ItemSubtitleSearchView: View {
             case .deleted:
                 break
             case .uploaded:
+                onDownloaded?(viewModel.externalSubtitles)
                 router.dismiss()
             }
         }

@@ -85,6 +85,11 @@ extension VideoPlayer.UIVideoPlayerContainerViewController {
                         }
                         .isSelected(true)
                         .focused($focusedElement, equals: .supplementTab(supplement.id))
+                        .buttonStyle(
+                            SupplementTitleButtonStyle(
+                                isFocused: focusedElement == .supplementTab(supplement.id)
+                            )
+                        )
                     } else {
                         ForEach(currentSupplements) { supplement in
                             let isSelected = containerState.selectedSupplement?.id == supplement.id
@@ -96,6 +101,11 @@ extension VideoPlayer.UIVideoPlayerContainerViewController {
                             }
                             .isSelected(isSelected)
                             .focused($focusedElement, equals: .supplementTab(supplement.id))
+                            .buttonStyle(
+                                SupplementTitleButtonStyle(
+                                    isFocused: focusedElement == .supplementTab(supplement.id)
+                                )
+                            )
                         }
                     }
                 }
@@ -115,7 +125,6 @@ extension VideoPlayer.UIVideoPlayerContainerViewController {
                     .padding(.trailing, safeAreaInsets.trailing)
                     .padding(.bottom, 8)
             }
-            .buttonStyle(SupplementTitleButtonStyle())
         }
 
         @ViewBuilder
@@ -138,12 +147,8 @@ extension VideoPlayer.UIVideoPlayerContainerViewController {
                             .eraseToAnyView()
                     }
                     #else
-                    SupplementTabView(
-                        items: Array(currentSupplements),
-                        selection: containerState.selectedSupplement?.id
-                    ) { supplement in
-                        supplementContainer(for: supplement.supplement)
-                            .eraseToAnyView()
+                    if let supplement = containerState.selectedSupplement {
+                        supplementContainer(for: AnyMediaPlayerSupplement(supplement))
                     }
                     #endif
                 }
@@ -173,6 +178,7 @@ extension VideoPlayer.UIVideoPlayerContainerViewController {
                     supplementContent
                         .isVisible(containerState.isPresentingSupplement)
                         .disabled(!containerState.isPresentingSupplement)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
                         .animation(.linear(duration: 0.25), value: containerState.selectedSupplement?.id)
                 }
                 .isVisible(isPresentingOverlay && !isScrubbing)

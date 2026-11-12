@@ -140,12 +140,15 @@ extension NavigationRoute {
 
     #endif
 
-    static func searchSubtitle(viewModel: ItemSubtitlesViewModel) -> NavigationRoute {
+    static func searchSubtitle(
+        viewModel: ItemSubtitlesViewModel,
+        onDownloaded: (([MediaStream]) -> Void)? = nil
+    ) -> NavigationRoute {
         NavigationRoute(
             id: "searchSubtitle",
             style: .sheet
         ) {
-            ItemSubtitleSearchView(viewModel: viewModel)
+            ItemSubtitleSearchView(viewModel: viewModel, onDownloaded: onDownloaded)
         }
     }
 

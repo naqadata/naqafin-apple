@@ -77,13 +77,24 @@ extension VideoPlayer.PlaybackControls {
                 TitleView(item: manager.item)
                     .frame(maxWidth: .infinity, alignment: .leading)
 
-                ActionButtons()
-                    .frame(height: Self.buttonSize)
-                    .padding(.horizontal)
+                HStack(spacing: Self.buttonSpacing) {
+                    #if os(tvOS)
+                    MediaSegmentSkipButton()
+                    #endif
+
+                    ActionButtons()
+                        .modifier(
+                            OverlayButtonStyleModifier(
+                                onPressed: onPressed,
+                                glassButtonSize: UIDevice.isTV ? 48 : nil
+                            )
+                        )
+                }
+                .frame(height: Self.buttonSize)
+                .padding(.horizontal)
             }
             .font(.system(size: fontSize, weight: .semibold))
             .labelStyle(.iconOnly)
-            .modifier(OverlayButtonStyleModifier(onPressed: onPressed))
             #if os(iOS)
                 .background {
                     EmptyHitTestView()
@@ -151,3 +162,52 @@ extension VideoPlayer.PlaybackControls.Toolbar {
         }
     }
 }
+
+#if os(tvOS)
+extension VideoPlayer.PlaybackControls.Toolbar {
+
+    struct MediaSegmentSkipButton: View {
+
+        @EnvironmentObject
+        private var containerState: VideoPlayerContainerState
+
+        @FocusState
+        private var isFocused: Bool
+
+        var body: some View {
+            if containerState.shouldShowMediaSegmentSkipButton,
+               let title = containerState.mediaSegmentSkipTitle,
+               let countdown = containerState.mediaSegmentCountdown
+            {
+                Button {
+                    containerState.skipMediaSegment()
+                } label: {
+                    HStack(spacing: 6) {
+                        Text(title)
+                            .lineLimit(1)
+
+                        Text(countdown.description)
+                            .monospacedDigit()
+                            .frame(width: 26, height: 26)
+                            .background(.black.opacity(0.18), in: Circle())
+                    }
+                    .font(.system(size: 20, weight: .semibold))
+                    .frame(width: 172, height: VideoPlayer.PlaybackControls.Toolbar.buttonSize)
+                }
+                .buttonStyle(
+                    NaqafinCapsuleButtonStyle(
+                        isFocused: isFocused,
+                        expandsToAvailableWidth: false,
+                        unfocusedFill: Color.black.opacity(0.55),
+                        unfocusedForeground: .white
+                    )
+                )
+                .focused($isFocused)
+                .onAppear {
+                    isFocused = true
+                }
+            }
+        }
+    }
+}
+#endif

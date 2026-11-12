@@ -13,14 +13,22 @@ extension VideoPlayer.UIVideoPlayerContainerViewController.SupplementContainerVi
     #if os(tvOS)
     struct SupplementTitleButtonStyle: ButtonStyle {
 
-        @Environment(\.isFocused)
-        private var isFocused
         @Environment(\.isSelected)
         private var isSelected
 
+        private let isFocused: Bool
+
+        init(isFocused: Bool = false) {
+            self.isFocused = isFocused
+        }
+
         @ViewBuilder
         func makeBody(configuration: Configuration) -> some View {
-            glassBody(configuration)
+            if isFocused {
+                focusedBody(configuration)
+            } else {
+                glassBody(configuration)
+            }
         }
 
         private func baseLabel(_ configuration: Configuration) -> some View {
@@ -38,11 +46,23 @@ extension VideoPlayer.UIVideoPlayerContainerViewController.SupplementContainerVi
                 .glassEffect(
                     .regular
                         .tint(isSelected ? .white : nil)
-                        .interactive(isFocused),
+                        .interactive(false),
                     in: Capsule()
                 )
                 .opacity(inactiveSelectedOpacity)
-                .animation(.easeInOut(duration: 0.1), value: isFocused)
+                .animation(.easeInOut(duration: 0.1), value: isSelected)
+        }
+
+        private func focusedBody(_ configuration: Configuration) -> some View {
+            baseLabel(configuration)
+                .foregroundStyle(.black)
+                .background {
+                    Capsule()
+                        .fill(Color.white)
+                }
+                .clipShape(Capsule())
+                .scaleEffect(1.06)
+                .shadow(color: .black.opacity(0.5), radius: 10)
                 .animation(.easeInOut(duration: 0.1), value: isSelected)
         }
 
@@ -89,6 +109,8 @@ extension VideoPlayer.UIVideoPlayerContainerViewController.SupplementContainerVi
 
         @State
         private var isPressed = false
+
+        init(isFocused _: Bool = false) {}
 
         @ViewBuilder
         func makeBody(configuration: Configuration) -> some View {

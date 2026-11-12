@@ -62,4 +62,5 @@ protocol MediaPlayerOffsetConfigurable {
 
 protocol MediaPlayerSubtitleConfigurable {
     func setSubtitleConfiguration(_ configuration: SubtitleConfiguration)
+    func setSubtitleSize(_ size: Int)
 }

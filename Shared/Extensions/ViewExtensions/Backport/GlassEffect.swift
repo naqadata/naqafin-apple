@@ -98,7 +98,9 @@ struct BackportGlassEffectModifier<BackgroundShape: Shape>: ViewModifier {
     @ViewBuilder
     private func platformAppearanceBody(_ content: some View) -> some View {
         #if os(tvOS)
-        glassBody(content)
+        // Native Liquid Glass produces corrupt corners and inconsistent foreground colors on physical Apple TV 4K.
+        // Use the stable material implementation for tvOS until that renderer is reliable.
+        legacyBody(content)
         #else
         if #available(iOS 26.0, *) {
             glassBody(content)

@@ -7,6 +7,8 @@
 //
 
 import CollectionHStack
+import FactoryKit
+import JellyfinAPI
 import SwiftUI
 
 enum PosterHStackMetrics {

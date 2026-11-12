@@ -13,6 +13,7 @@ protocol MediaPlayerQueue: ObservableObject, MediaPlayerObserver, MediaPlayerSup
 
     var hasNextItem: Bool { get }
     var hasPreviousItem: Bool { get }
+    var automaticallyPlaysNext: Bool { get }
 
     var nextItem: MediaPlayerItemProvider? { get }
     var previousItem: MediaPlayerItemProvider? { get }
@@ -32,6 +33,10 @@ extension MediaPlayerQueue {
     var hasPreviousItem: Bool {
         previousItem != nil
     }
+
+    var automaticallyPlaysNext: Bool {
+        false
+    }
 }
 
 class AnyMediaPlayerQueue: MediaPlayerQueue {
@@ -40,6 +45,9 @@ class AnyMediaPlayerQueue: MediaPlayerQueue {
     var hasNextItem: Bool
     @Published
     var hasPreviousItem: Bool
+    var automaticallyPlaysNext: Bool {
+        wrapped.automaticallyPlaysNext
+    }
 
     @Published
     var nextItem: MediaPlayerItemProvider?

@@ -53,6 +53,7 @@ struct VideoPlayer: View {
         } playbackControls: {
             PlaybackControls()
         }
+        .environment(\.subtitleOffset, $subtitleOffset)
         .onAppear {
             manager.proxy = proxy
             manager.start()
@@ -109,6 +110,19 @@ struct VideoPlayer: View {
 
             // TODO: move to container view
             containerState.scrubbedSeconds.value = newItem?.baseItem.startSeconds ?? .zero
+
+            Task {
+                await containerState.loadMediaSegments(
+                    for: newItem?.baseItem.id,
+                    at: manager.seconds
+                )
+            }
+        }
+        .onReceive(manager.secondsBox.$value) { seconds in
+            containerState.updateMediaSegment(for: seconds)
+        }
+        .onReceive(manager.$playbackRequestStatus) { status in
+            containerState.setMediaSegmentPlaybackActive(status == .playing)
         }
         .onReceive(manager.$state) { newState in
             if newState == .stopped, !isBeingDismissedByTransition {

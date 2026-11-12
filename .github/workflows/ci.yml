@@ -18,8 +18,8 @@ jobs:
     strategy:
       matrix:
         scheme:
-          - "Swiftfin"
-          - "Swiftfin tvOS"
+          - "Naqafin"
+          - "Naqafin tvOS"
 
     runs-on: macos-26
 

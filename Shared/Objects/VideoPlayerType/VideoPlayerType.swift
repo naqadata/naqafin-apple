@@ -8,8 +8,6 @@
 
 import JellyfinAPI
 
-// TODO: remove, change to VLC, AVPlayer
-
 enum VideoPlayerType: String, CaseIterable, Displayable, Storable {
 
     case native
@@ -20,7 +18,7 @@ enum VideoPlayerType: String, CaseIterable, Displayable, Storable {
         case .native:
             L10n.native
         case .swiftfin:
-            L10n.swiftfin
+            L10n.vlc
         }
     }
 

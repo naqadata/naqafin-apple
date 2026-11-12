@@ -66,6 +66,9 @@ playground.xcworkspace
 
 Carthage/Build
 
+# Local cache used by Carthage downloads; dependencies are recreated by the build.
+.carthage-home/
+
 # Accio dependency management
 Dependencies/
 .accio/

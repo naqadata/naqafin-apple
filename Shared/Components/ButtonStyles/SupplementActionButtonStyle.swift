@@ -8,6 +8,86 @@
 
 import SwiftUI
 
+#if os(tvOS)
+extension ButtonStyle where Self == SupplementActionButtonStyle {
+
+    static var supplementAction: SupplementActionButtonStyle {
+        SupplementActionButtonStyle()
+    }
+}
+
+struct NaqafinCapsuleButtonStyle: ButtonStyle {
+
+    let isFocused: Bool
+    let expandsToAvailableWidth: Bool
+    let unfocusedFill: Color
+    let unfocusedForeground: Color
+
+    init(
+        isFocused: Bool,
+        expandsToAvailableWidth: Bool = true,
+        unfocusedFill: Color = .white,
+        unfocusedForeground: Color = .black
+    ) {
+        self.isFocused = isFocused
+        self.expandsToAvailableWidth = expandsToAvailableWidth
+        self.unfocusedFill = unfocusedFill
+        self.unfocusedForeground = unfocusedForeground
+    }
+
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .modifier(
+                NaqafinCapsuleButtonAppearance(
+                    isFocused: isFocused,
+                    isPressed: configuration.isPressed,
+                    expandsToAvailableWidth: expandsToAvailableWidth,
+                    unfocusedFill: unfocusedFill,
+                    unfocusedForeground: unfocusedForeground
+                )
+            )
+    }
+}
+
+private struct NaqafinCapsuleButtonAppearance: ViewModifier {
+
+    let isFocused: Bool
+    let isPressed: Bool
+    let expandsToAvailableWidth: Bool
+    let unfocusedFill: Color
+    let unfocusedForeground: Color
+
+    func body(content: Content) -> some View {
+        content
+            .foregroundStyle(isFocused ? .black : unfocusedForeground)
+            .frame(maxWidth: expandsToAvailableWidth ? .infinity : nil, maxHeight: .infinity)
+            .background(isFocused ? Color.white : unfocusedFill, in: Capsule())
+            .scaleEffect(isPressed ? 0.96 : isFocused ? 1.04 : 1)
+            .shadow(color: isFocused ? .black.opacity(0.5) : .clear, radius: isFocused ? 10 : 0)
+            .animation(.easeInOut(duration: 0.1), value: isFocused)
+            .animation(.easeInOut(duration: 0.1), value: isPressed)
+    }
+}
+
+struct SupplementActionButtonStyle: ButtonStyle {
+
+    @Environment(\.isFocused)
+    private var environmentIsFocused
+
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .modifier(
+                NaqafinCapsuleButtonAppearance(
+                    isFocused: environmentIsFocused,
+                    isPressed: configuration.isPressed,
+                    expandsToAvailableWidth: true,
+                    unfocusedFill: .white,
+                    unfocusedForeground: .black
+                )
+            )
+    }
+}
+#else
 extension PrimitiveButtonStyle where Self == SupplementActionButtonStyle {
 
     static var supplementAction: SupplementActionButtonStyle {
@@ -66,3 +146,4 @@ struct SupplementActionButtonStyle: PrimitiveButtonStyle {
         #endif
     }
 }
+#endif

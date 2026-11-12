@@ -166,7 +166,13 @@ final class MediaPlayerManager: ViewModel {
 
     var seconds: Duration {
         get { secondsBox.value }
-        set { secondsBox.value = newValue }
+        set {
+            secondsBox.value = newValue
+            userSession?.naqafinLiveCaptionService.updatePlaybackPosition(
+                newValue,
+                for: playbackItem?.baseItem.id
+            )
+        }
     }
 
     var playbackBitrate: PlaybackBitrate {
@@ -232,14 +238,20 @@ final class MediaPlayerManager: ViewModel {
             await self.stop()
             return
         }
-        let isNearEnd = (runtime - seconds) <= .seconds(1)
+        // VLC can signal its terminal state before its final HLS segment has
+        // updated the progress callback.  Accept a small, bounded tail rather
+        // than leaving the player in a terminal-but-not-completed state.
+        let isNearEnd = (runtime - seconds) <= .seconds(90)
 
         guard isNearEnd else {
             // If not near end, ignore.
             return
         }
 
-        if let nextItem = queue?.nextItem, try authenticatedUser.data.configuration?.enableNextEpisodeAutoPlay == true {
+        let isNextEpisodeAutoplayEnabled = try authenticatedUser.data.configuration?.enableNextEpisodeAutoPlay == true
+        if let nextItem = queue?.nextItem,
+           queue?.automaticallyPlaysNext == true || isNextEpisodeAutoplayEnabled
+        {
             await self.playNewItem(provider: nextItem)
         } else {
             await self.stop()
@@ -269,6 +281,7 @@ final class MediaPlayerManager: ViewModel {
             )
         }
 
+        await userSession?.naqafinLiveCaptionService.stopIfNeeded()
         proxy?.stop()
         Container.shared.mediaPlayerManagerPublisher().send(nil)
         Container.shared.mediaPlayerManager.reset()
@@ -278,6 +291,7 @@ final class MediaPlayerManager: ViewModel {
     private func _playNewItem(_ provider: MediaPlayerItemProvider) async throws {
         item = provider.item
         setSupplements()
+        await userSession?.naqafinLiveCaptionService.stopIfNeeded()
         proxy?.stop()
         playbackItem = try await provider()
     }
@@ -369,6 +383,7 @@ final class MediaPlayerManager: ViewModel {
     @Function(\Action.Cases.stop)
     private func _stop() async throws {
         await self.cancel()
+        await userSession?.naqafinLiveCaptionService.stopIfNeeded()
 
         proxy?.stop()
         Container.shared.mediaPlayerManagerPublisher().send(nil)
@@ -408,6 +423,7 @@ final class MediaPlayerManager: ViewModel {
             ]
         )
 
+        await userSession?.naqafinLiveCaptionService.stopIfNeeded()
         proxy?.stop()
 
         let newItem = try await MediaPlayerItem.build(
@@ -435,6 +451,21 @@ final class MediaPlayerManager: ViewModel {
 
         self.playbackItem = newItem
         self.seconds = currentSeconds
+    }
+
+    func reloadCurrentItem(selectingSubtitleStreamIndex subtitleStreamIndex: Int?) {
+        guard let playbackItem else { return }
+
+        Task {
+            do {
+                try await updateMediaPlayerItem(
+                    currentItem: playbackItem,
+                    subtitleStreamIndex: subtitleStreamIndex
+                )
+            } catch {
+                await self.error(error)
+            }
+        }
     }
 
     nonisolated static func getMaxBitrate(

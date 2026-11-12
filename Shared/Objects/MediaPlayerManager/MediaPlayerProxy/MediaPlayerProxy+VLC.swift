@@ -82,6 +82,10 @@ class VLCMediaPlayerProxy: VideoMediaPlayerProxy,
         vlcUIProxy.setSubtitleTrack(.absolute(stream.index ?? -1))
     }
 
+    func addLiveCaptionTrack(url: URL) {
+        vlcUIProxy.addPlaybackChild(.init(url: url, type: .subtitle, enforce: true))
+    }
+
     func setAspectFill(_ aspectFill: Bool) {
         vlcUIProxy.aspectFill(aspectFill ? 1 : 0)
     }
@@ -98,6 +102,10 @@ class VLCMediaPlayerProxy: VideoMediaPlayerProxy,
         vlcUIProxy.setSubtitleColor(.absolute(configuration.color.uiColor))
         vlcUIProxy.setSubtitleFont(configuration.fontName)
         vlcUIProxy.setSubtitleSize(.absolute(25 - configuration.size))
+    }
+
+    func setSubtitleSize(_ size: Int) {
+        vlcUIProxy.setSubtitleSize(.absolute(25 - size))
     }
 
     @ViewBuilder

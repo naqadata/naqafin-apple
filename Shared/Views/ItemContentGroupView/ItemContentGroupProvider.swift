@@ -19,6 +19,8 @@ final class ItemContentGroupProvider: ViewModel, ContentGroupProvider {
     @Published
     private(set) var mediaPlayerItemProvider: MediaPlayerItemProvider?
     @Published
+    private(set) var playlistUpNextContext: NaqafinPlaylistUpNextContext?
+    @Published
     private(set) var randomBackdropItem: BaseItemDto?
 
     let id: String
@@ -52,6 +54,7 @@ final class ItemContentGroupProvider: ViewModel, ContentGroupProvider {
         item = fullItem
         localTrailers = newLocalTrailers ?? []
         mediaPlayerItemProvider = newMediaPlayerItemProvider
+        playlistUpNextContext = userSession.naqafinPlaylistUpNextContextStore.context(for: fullItem.id)
         randomBackdropItem = newRandomBackdropItem
 
         return try await _makeGroups(

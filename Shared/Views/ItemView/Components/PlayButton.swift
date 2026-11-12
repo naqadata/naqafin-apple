@@ -58,8 +58,15 @@ struct PlayButton: View {
             return
         }
 
-        let queue: (any MediaPlayerQueue)? = mediaPlayerItemProvider.item.type == .episode ?
-            EpisodeMediaPlayerQueue(episode: mediaPlayerItemProvider.item) : nil
+        let queue: (any MediaPlayerQueue)? = if let playlistContext = provider.playlistUpNextContext,
+                                                let itemID = mediaPlayerItemProvider.item.id
+        {
+            PlaylistUpNextMediaPlayerQueue(context: playlistContext, initialItemID: itemID)
+        } else if mediaPlayerItemProvider.item.type == .episode {
+            EpisodeMediaPlayerQueue(episode: mediaPlayerItemProvider.item)
+        } else {
+            nil
+        }
 
         router.route(
             to: .videoPlayer(
@@ -174,5 +181,24 @@ struct PlayButton: View {
             versionMenu
         }
         .frame(height: UIDevice.isTV ? 75 : 44)
+    }
+}
+
+struct PlaylistUpNextContextLabel: View {
+
+    @ObservedObject
+    private var provider: ItemContentGroupProvider
+
+    init(provider: ItemContentGroupProvider) {
+        self.provider = provider
+    }
+
+    var body: some View {
+        if let playlistName = provider.playlistUpNextContext?.playlistName {
+            Text("Playlist: \(playlistName)")
+                .font(.subheadline)
+                .fontWeight(.medium)
+                .foregroundStyle(.secondary)
+        }
     }
 }

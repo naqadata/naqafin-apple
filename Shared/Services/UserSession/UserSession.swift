@@ -27,11 +27,24 @@ final class UserSession {
     @MainActor
     lazy var serverConnectionManager = ServerConnectionManager()
 
+    @MainActor
+    lazy var naqafinFeatureService = NaqafinFeatureService()
+
+    @MainActor
+    lazy var naqafinPlaylistUpNextContextStore = NaqafinPlaylistUpNextContextStore()
+
+    @MainActor
+    lazy var naqafinPlaylistUpNextService = NaqafinPlaylistUpNextService(userSession: self)
+
+    @MainActor
+    lazy var naqafinLiveCaptionService = NaqafinLiveCaptionService(userSession: self)
+
     lazy var serverSocketManager = ServerSocketManager()
 
     @MainActor
     private lazy var services: [any UserSessionService] = [
         serverConnectionManager,
+        naqafinFeatureService,
         serverSocketManager,
     ]
 
@@ -59,6 +72,10 @@ final class UserSession {
 
     @MainActor
     func willStop() {
+        Task { @MainActor [weak self] in
+            await self?.naqafinLiveCaptionService.stopIfNeeded()
+        }
+
         for service in services.reversed() {
             service.willStop(userSession: self)
         }

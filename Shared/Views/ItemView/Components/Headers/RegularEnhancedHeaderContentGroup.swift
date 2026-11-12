@@ -25,6 +25,9 @@ extension ItemView {
             @FocusState
             private var isPlayButtonFocused: Bool
 
+            @State
+            private var hasRequestedInitialFocus = false
+
             @ObservedObject
             var provider: ItemContentGroupProvider
 
@@ -106,6 +109,8 @@ extension ItemView {
                     VStack(alignment: .leading, spacing: 10) {
                         ItemView.Description(item: provider.item)
 
+                        PlaylistUpNextContextLabel(provider: provider)
+
                         HStack(alignment: .top) {
                             ItemView.AttributesHStack(
                                 attributes: attributes,
@@ -128,6 +133,13 @@ extension ItemView {
                     true,
                     priority: .userInitiated
                 )
+                .task {
+                    guard !hasRequestedInitialFocus else { return }
+
+                    hasRequestedInitialFocus = true
+                    await Task.yield()
+                    isPlayButtonFocused = true
+                }
                 #else
                 .edgePadding(.bottom)
                     .background(

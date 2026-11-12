@@ -7,6 +7,7 @@
 //
 
 import Defaults
+import FactoryKit
 import SwiftUI
 
 // TODO: ensure changes on playback item change
@@ -35,7 +36,11 @@ extension VideoPlayer.PlaybackControls.Toolbar {
                 filteredButtons.removeAll { $0 == .audio }
             }
 
-            if manager.playbackItem?.subtitleStreams.isEmpty == true {
+            let supportsLiveCaptions = Container.shared.currentUserSession()?
+                .naqafinFeatureService.snapshot.supportsLiveCaptions == true
+            if manager.playbackItem?.subtitleStreams.isEmpty == true,
+               !supportsLiveCaptions
+            {
                 filteredButtons.removeAll { $0 == .subtitles }
             }
 
@@ -99,6 +104,26 @@ extension VideoPlayer.PlaybackControls.Toolbar {
 
         @ViewBuilder
         private func view(for button: VideoPlayerActionButton) -> some View {
+            #if os(tvOS)
+            switch button {
+            case .audio:
+                PlaybackActionMenuButton(page: .audio)
+            case .playbackSpeed:
+                PlaybackActionMenuButton(page: .speed)
+            case .playbackSettings:
+                PlaybackActionMenuButton(page: .quality)
+            case .subtitles:
+                PlaybackActionMenuButton(page: .subtitles)
+            default:
+                standardView(for: button)
+            }
+            #else
+            standardView(for: button)
+            #endif
+        }
+
+        @ViewBuilder
+        private func standardView(for button: VideoPlayerActionButton) -> some View {
             switch button {
             case .aspectFill:
                 AspectFill()
@@ -166,6 +191,17 @@ extension VideoPlayer.PlaybackControls.Toolbar {
                 }
 
                 if menuActionButtons.isNotEmpty {
+                    #if os(tvOS)
+                    Button {
+                        containerState.isPresentingPlaybackActionMenu = true
+                    } label: {
+                        menuLabel
+                    }
+                    .frame(width: buttonSize, height: buttonSize)
+                    .symbolRenderingMode(.monochrome)
+                    .foregroundStyle(.primary, .secondary)
+                    .focused($focusedButton, equals: "menu")
+                    #else
                     Menu {
                         ForEach(
                             menuActionButtons,
@@ -184,6 +220,7 @@ extension VideoPlayer.PlaybackControls.Toolbar {
                     .symbolRenderingMode(.monochrome)
                     .foregroundStyle(.primary, .secondary)
                     .focused($focusedButton, equals: "menu")
+                    #endif
                 }
             }
             .focusSection()
@@ -196,6 +233,10 @@ extension VideoPlayer.PlaybackControls.Toolbar {
         }
 
         var body: some View {
+            #if os(tvOS)
+            LiveCaptionAutoStarter()
+            #endif
+
             if containerState.isCompact {
                 compactView
             } else {

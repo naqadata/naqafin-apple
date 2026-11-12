@@ -58,6 +58,7 @@ final class ContentGroupViewModel<Provider: ContentGroupProvider>: ViewModel {
         )
         .sink { [weak self] _ in
             self?.lastRefreshSignalDate = Date.now
+            self?.background.refresh()
         }
         .store(in: &cancellables)
     }

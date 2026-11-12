@@ -329,6 +329,12 @@ final class UserSessionManager: ObservableObject {
             throw UserSessionError.invalidStoredSession(userID: userId)
         }
 
+        guard keychain.get("\(user.id)-accessToken") != nil else {
+            Defaults[.lastSignedInUserID] = .signedOut
+            try? user.delete()
+            throw UserSessionError.invalidStoredSession(userID: userId)
+        }
+
         return .init(
             server: server,
             user: user

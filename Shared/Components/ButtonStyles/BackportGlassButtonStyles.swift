@@ -80,7 +80,7 @@ private struct BackportGlassButtonStyleBody: View {
     @ViewBuilder
     var body: some View {
         #if os(tvOS)
-        nativeBody
+        fallbackBody
         #else
         if #available(iOS 26.0, *) {
             nativeBody

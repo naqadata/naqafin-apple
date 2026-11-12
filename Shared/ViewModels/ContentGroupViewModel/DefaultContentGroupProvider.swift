@@ -45,14 +45,14 @@ struct DefaultContentGroupProvider: ContentGroupProvider {
 
         #if os(tvOS)
         let cinematicSelectionContentGroup = CinematicSelectionContentGroup(
-            resumeLibrary: ResumeItemsLibrary(mediaTypes: [.video]),
+            resumeLibrary: NaqafinResumeItemsLibrary(mediaTypes: [.video]),
             recentlyAddedLibrary: RecentlyAddedLibrary()
         )
 
         cinematicSelectionContentGroup
         #else
         PosterGroup(
-            library: ResumeItemsLibrary(mediaTypes: [.video]),
+            library: NaqafinResumeItemsLibrary(mediaTypes: [.video]),
             posterDisplayType: .landscape,
             posterSize: .medium,
             _viewContext: .isInResume
@@ -60,7 +60,7 @@ struct DefaultContentGroupProvider: ContentGroupProvider {
         #endif
 
         PosterGroup(
-            library: NextUpLibrary()
+            library: NaqafinNextUpLibrary()
         )
 
         if Defaults[.Customization.Home.showRecentlyAdded] {

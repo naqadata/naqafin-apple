@@ -19,6 +19,8 @@ extension CustomizeViewsSettings {
         private var maxNextUp
         @Default(.Customization.Home.resumeNextUp)
         private var resumeNextUp
+        @Default(.Customization.Home.includeAudioPlaylistItems)
+        private var includeAudioPlaylistItems
 
         @State
         private var isNextUpDaysPresented = false
@@ -29,6 +31,8 @@ extension CustomizeViewsSettings {
                 Toggle(L10n.recentlyAdded, isOn: $showRecentlyAdded)
 
                 Toggle(L10n.nextUpRewatch, isOn: $resumeNextUp)
+
+                Toggle("Include Audio Playlist Items", isOn: $includeAudioPlaylistItems)
 
                 ChevronButton {
                     isNextUpDaysPresented = true

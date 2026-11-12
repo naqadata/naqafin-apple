@@ -13,12 +13,23 @@ extension VideoPlayer.PlaybackControls {
     struct OverlayButtonStyleModifier: ViewModifier {
 
         let onPressed: (Bool) -> Void
+        let glassButtonSize: CGFloat?
+
+        init(onPressed: @escaping (Bool) -> Void, glassButtonSize: CGFloat? = nil) {
+            self.onPressed = onPressed
+            self.glassButtonSize = glassButtonSize
+        }
 
         @ViewBuilder
         func body(content: Content) -> some View {
             if #available(iOS 26.0, *) {
                 content
-                    .buttonStyle(OverlayGlassButtonStyle(onPressed: onPressed))
+                    .buttonStyle(
+                        OverlayGlassButtonStyle(
+                            onPressed: onPressed,
+                            glassButtonSize: glassButtonSize
+                        )
+                    )
                     .backport
                     .buttonBorderShape(.circle)
             } else {
@@ -32,12 +43,17 @@ extension VideoPlayer.PlaybackControls {
     struct OverlayGlassButtonStyle: PrimitiveButtonStyle {
 
         let onPressed: (Bool) -> Void
+        let glassButtonSize: CGFloat?
 
         func makeBody(configuration: Configuration) -> some View {
             Button(role: configuration.role) {
                 configuration.trigger()
             } label: {
                 configuration.label
+                    .frame(
+                        width: glassButtonSize,
+                        height: glassButtonSize
+                    )
             }
             .buttonStyle(.glass)
             .onLongPressGesture(minimumDuration: .infinity) {} onPressingChanged: { isPressed in

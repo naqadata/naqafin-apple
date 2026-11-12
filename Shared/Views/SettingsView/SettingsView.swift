@@ -36,7 +36,7 @@ struct SettingsView: View {
     // MARK: - Body
 
     var body: some View {
-        Form(image: .jellyfinBlobBlue) {
+        Form(image: .naqafinMark) {
             serverSection
             videoPlayerSection
             customizeSection
@@ -132,7 +132,7 @@ struct SettingsView: View {
             }
         } learnMore: {
             LabeledContent(
-                L10n.swiftfin,
+                L10n.vlc,
                 value: L10n.playerSwiftfinDescription
             )
             LabeledContent(

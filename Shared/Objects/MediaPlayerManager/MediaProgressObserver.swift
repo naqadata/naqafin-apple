@@ -153,6 +153,11 @@ class MediaProgressObserver: ViewModel, MediaPlayerObserver {
 
             let request = Paths.reportPlaybackStopped(info)
             try await send(request)
+
+            var userData = item.baseItem.userData ?? .init()
+            userData.itemID = item.baseItem.id
+            userData.playbackPositionTicks = seconds?.ticks
+            Notifications[.itemUserDataDidChange].post(userData)
         }
     }
 
